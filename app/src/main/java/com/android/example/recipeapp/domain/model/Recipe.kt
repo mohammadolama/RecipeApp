@@ -1,6 +1,5 @@
 package com.android.example.recipeapp.domain.model
 
-import android.content.ClipDescription
 import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
 
