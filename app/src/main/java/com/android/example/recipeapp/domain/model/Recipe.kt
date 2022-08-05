@@ -17,9 +17,9 @@ data class Recipe(
     var cookingInstructions: String? = null,
     var ingredients: List<String> = listOf(),
     var dateAdded: String? = null,
-    var dateUpdated : String? = null,
+    var dateUpdated: String? = null,
 
 
-) : Parcelable {
+    ) : Parcelable {
 
 }

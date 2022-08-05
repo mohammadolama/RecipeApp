@@ -2,7 +2,7 @@ package com.android.example.recipeapp.network.model
 
 import com.google.gson.annotations.SerializedName
 
-data class RecipeDto (
+data class RecipeDto(
 
     @SerializedName("pk")
     var pk: Int? = null,
@@ -36,8 +36,8 @@ data class RecipeDto (
     var dateAdded: String? = null,
 
     @SerializedName("date_updated")
-    var dateUpdated : String? = null,
-    ){
+    var dateUpdated: String? = null,
+) {
     override fun toString(): String {
         return "RecipeNetworkEntity(pk=$pk, title=$title, publisher=$publisher, rating=$rating, description=$description)"
     }
