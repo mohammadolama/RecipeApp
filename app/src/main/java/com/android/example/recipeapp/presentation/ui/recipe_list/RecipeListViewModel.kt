@@ -26,6 +26,10 @@ class RecipeListViewModel
 
 
     init {
+        newSearch()
+    }
+
+    fun newSearch(){
         viewModelScope.launch {
             val result = repository.search(token = token , page = 1 , query = "chicken")
             recipes.value = result
