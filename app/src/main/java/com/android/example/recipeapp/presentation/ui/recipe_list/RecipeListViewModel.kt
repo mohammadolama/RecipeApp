@@ -21,23 +21,44 @@ class RecipeListViewModel
     @Named("auth_token") private val token: String,
 ) : ViewModel() {
 
-    val recipes : MutableState<List<Recipe>> = mutableStateOf(listOf())
+    val recipes: MutableState<List<Recipe>> = mutableStateOf(listOf())
 
-    val query = mutableStateOf("beef")
+    val query = mutableStateOf("")
+
+    val selectedCategory: MutableState<FoodCategory?> = mutableStateOf(null)
+
+    var categoryScrollPosition: Int = 0
+    var categoryScrollPosition2: Int = 0
 
     init {
-        newSearch("Chicken")
+        newSearch()
     }
 
-    fun newSearch(query:String){
+    fun newSearch() {
         viewModelScope.launch {
-            val result = repository.search(token = token , page = 1 , query = query)
+            val result = repository.search(
+                token = token,
+                page = 1,
+                query = query.value
+            )
             recipes.value = result
         }
     }
 
 
-    fun onQueryChanged(query: String){
+    fun onQueryChanged(query: String) {
         this.query.value = query
     }
+
+    fun onSelectedCategoryChanged(category : String){
+        val newCategory = getFoodCategory(category)
+        selectedCategory.value = newCategory
+        onQueryChanged(category)
+    }
+
+    fun onChangedCategoryScrollPosition(position: Int , position2: Int){
+        categoryScrollPosition = position
+        categoryScrollPosition2 = position2
+    }
+
 }
