@@ -9,6 +9,7 @@ import androidx.lifecycle.viewModelScope
 import com.android.example.recipeapp.domain.model.Recipe
 import com.android.example.recipeapp.repository.RecipeRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 import javax.inject.Named
@@ -30,18 +31,27 @@ class RecipeListViewModel
     var categoryScrollPosition: Int = 0
     var categoryScrollPosition2: Int = 0
 
+    val loading = mutableStateOf(false)
+
     init {
         newSearch()
     }
 
     fun newSearch() {
         viewModelScope.launch {
+            loading.value = true
+            resetSearchState()
+            delay(2000)
+
             val result = repository.search(
                 token = token,
                 page = 1,
                 query = query.value
             )
+
             recipes.value = result
+
+            loading.value = false
         }
     }
 
@@ -50,15 +60,26 @@ class RecipeListViewModel
         this.query.value = query
     }
 
-    fun onSelectedCategoryChanged(category : String){
+    fun onSelectedCategoryChanged(category: String) {
         val newCategory = getFoodCategory(category)
         selectedCategory.value = newCategory
         onQueryChanged(category)
     }
 
-    fun onChangedCategoryScrollPosition(position: Int , position2: Int){
+    fun onChangedCategoryScrollPosition(position: Int, position2: Int) {
         categoryScrollPosition = position
         categoryScrollPosition2 = position2
+    }
+
+    private fun clearSelectedCategory(){
+        selectedCategory.value = null
+    }
+
+    private fun resetSearchState(){
+        recipes.value = listOf()
+        if (selectedCategory.value?.value != query.value){
+            clearSelectedCategory()
+        }
     }
 
 }

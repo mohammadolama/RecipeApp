@@ -27,8 +27,10 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import com.android.example.recipeapp.presentation.components.CircularIndeterminateProgressBar
 import com.android.example.recipeapp.presentation.components.FoodCategoryChip
 import com.android.example.recipeapp.presentation.components.RecipeCard
+import com.android.example.recipeapp.presentation.components.SearchAppBar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -56,87 +58,39 @@ class RecipeListFragment : Fragment() {
                 val focusManager = LocalFocusManager.current
 
                 val selectedCategory = viewModel.selectedCategory.value
+
                 val scope = rememberCoroutineScope()
+
+                val loading = viewModel.loading.value
 
                 Column() {
 
-                    Surface(
-                        modifier = Modifier.fillMaxWidth(),
-                        elevation = 8.dp,
-                        color = Color.White
+                    SearchAppBar(
+                        query = query,
+                        onQueryChanged = viewModel::onQueryChanged,
+                        newSearch = viewModel::newSearch,
+                        focusManager = focusManager,
+                        scrollPosition = viewModel.categoryScrollPosition,
+                        scrollOffset = viewModel.categoryScrollPosition2,
+                        scope = scope,
+                        selectedCategory = selectedCategory,
+                        onSelectedCategoryChanged = viewModel::onSelectedCategoryChanged,
+                        onChangedCategoryScrollPosition = viewModel::onChangedCategoryScrollPosition
+                    )
+
+                    Box(
+                        modifier = Modifier.fillMaxSize()
                     ) {
-                        Column {
-                            Row(
-                                modifier = Modifier.fillMaxWidth()
-                            ) {
-                                TextField(
-                                    modifier = Modifier
-                                        .fillMaxWidth(0.9f)
-                                        .padding(8.dp),
-                                    value = query,
-                                    onValueChange = {
-                                        viewModel.onQueryChanged(it)
-                                    },
-                                    label = {
-                                        Text(text = "Search")
-                                    },
-                                    leadingIcon = {
-                                        Icon(Icons.Filled.Search, "d")
-                                    },
-                                    keyboardOptions = KeyboardOptions.Default.copy(
-                                        keyboardType = KeyboardType.Text,
-                                        imeAction = ImeAction.Search
-                                    ),
-                                    keyboardActions = KeyboardActions(
-                                        onSearch = {
-                                            viewModel.newSearch()
-                                            focusManager.clearFocus()
-                                        }
-                                    ),
-                                    textStyle = TextStyle(
-                                        color = MaterialTheme.colors.onSurface
-                                    ),
-                                    colors = TextFieldDefaults.textFieldColors(
-                                        backgroundColor = MaterialTheme.colors.surface,
-                                    )
-                                )
-
-                            }
-
-                            val scrollState = rememberLazyListState()
-                            LazyRow(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .padding(start = 8.dp, bottom = 8.dp),
-                                state = scrollState
-                            ) {
-                                itemsIndexed(
-                                    items = getAllFoodCategories()
-                                ) { _, category ->
-                                    FoodCategoryChip(
-                                        category = category.value,
-                                        isSelected = selectedCategory == category,
-                                        onSelectedCategoryChanged = {
-                                            viewModel.onSelectedCategoryChanged(it)
-                                            viewModel.onChangedCategoryScrollPosition(scrollState.firstVisibleItemIndex , scrollState.firstVisibleItemScrollOffset)
-                                        },
-                                        onExecuteSearch = { viewModel.newSearch() },
-
-                                        )
-                                }
-                                scope.launch {
-                                    scrollState.animateScrollToItem(index = viewModel.categoryScrollPosition , viewModel.categoryScrollPosition2)
-                                }
+                        LazyColumn {
+                            itemsIndexed(
+                                items = recipes
+                            ) { index, item ->
+                                RecipeCard(recipe = item, onClick = {})
                             }
                         }
+                        CircularIndeterminateProgressBar(isDisplayed = loading)
                     }
-                    LazyColumn {
-                        itemsIndexed(
-                            items = recipes
-                        ) { index, item ->
-                            RecipeCard(recipe = item, onClick = {})
-                        }
-                    }
+
                 }
 
             }

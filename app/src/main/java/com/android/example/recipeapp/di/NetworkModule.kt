@@ -7,6 +7,8 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import javax.inject.Named
@@ -26,9 +28,19 @@ object NetworkModule {
     @Singleton
     @Provides
     fun provideRecipeService(): RecipeService {
+
+        val logging = HttpLoggingInterceptor()
+        logging.setLevel(HttpLoggingInterceptor.Level.BODY)
+
+        val mOkHttpClient = OkHttpClient
+            .Builder()
+            .addInterceptor(logging)
+            .build()
+
         return Retrofit.Builder()
             .baseUrl("https://food2fork.ca/api/recipe/")
             .addConverterFactory(GsonConverterFactory.create(GsonBuilder().create()))
+//            .client(mOkHttpClient)
             .build()
             .create(RecipeService::class.java)
     }
