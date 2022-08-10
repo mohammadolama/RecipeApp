@@ -3,6 +3,7 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/Mojtaba/AndroidStudioProjects/RecipeApp/app/src/main/res/drawable-v24/ic_profile.xml" value="0.179" />
         <entry key="..\:/Users/Mojtaba/AndroidStudioProjects/RecipeApp/app/src/main/res/layout/activity_main.xml" value="0.1" />
         <entry key="..\:/Users/Mojtaba/AndroidStudioProjects/RecipeApp/app/src/main/res/layout/fragment_recipe_list.xml" value="0.25416666666666665" />
       </map>
