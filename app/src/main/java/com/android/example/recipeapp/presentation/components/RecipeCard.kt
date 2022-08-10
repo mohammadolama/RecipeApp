@@ -14,6 +14,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.android.example.recipeapp.R
 import com.android.example.recipeapp.domain.model.Recipe
 import com.android.example.recipeapp.util.loadPicture
@@ -25,18 +26,20 @@ fun RecipeCard(
 ) {
 
     Card(
-        shape = MaterialTheme.shapes.small,
+        shape = MaterialTheme.shapes.medium,
         modifier = Modifier
-            .padding(
-                top = 6.dp,
-                bottom = 6.dp
-            )
+            .padding(6.dp)
             .fillMaxWidth()
             .clickable(onClick = onClick),
         elevation = 8.dp
     ) {
 
-        Column() {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(bottom = 8.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
             // todo use asyncImage composable !
             recipe.featuredImage?.let { url ->
                 val image = loadPicture(url = url)
@@ -66,7 +69,7 @@ fun RecipeCard(
                         modifier = Modifier
                             .fillMaxWidth(0.85f)
                             .wrapContentWidth(Alignment.Start),
-                        style = MaterialTheme.typography.h5
+                        style = MaterialTheme.typography.h3
                     )
                     Text(
                         text = recipe.rating.toString(),
@@ -74,10 +77,11 @@ fun RecipeCard(
                             .fillMaxWidth()
                             .wrapContentWidth(Alignment.End)
                             .align(Alignment.CenterVertically),
-                        style = MaterialTheme.typography.h6
+                        style = MaterialTheme.typography.h5
                     )
                 }
             }
+            FavButton()
         }
     }
 

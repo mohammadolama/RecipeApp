@@ -34,6 +34,7 @@ class RecipeListViewModel
     val loading = mutableStateOf(false)
 
     init {
+//        loading.value = true
         newSearch()
     }
 
@@ -41,7 +42,7 @@ class RecipeListViewModel
         viewModelScope.launch {
             loading.value = true
             resetSearchState()
-            delay(2000)
+//            delay(2000)
 
             val result = repository.search(
                 token = token,

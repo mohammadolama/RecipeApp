@@ -40,7 +40,7 @@ object NetworkModule {
         return Retrofit.Builder()
             .baseUrl("https://food2fork.ca/api/recipe/")
             .addConverterFactory(GsonConverterFactory.create(GsonBuilder().create()))
-//            .client(mOkHttpClient)
+            .client(mOkHttpClient)
             .build()
             .create(RecipeService::class.java)
     }
