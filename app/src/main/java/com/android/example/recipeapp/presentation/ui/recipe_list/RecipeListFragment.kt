@@ -23,6 +23,7 @@ import androidx.compose.ui.unit.dp
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.findNavController
 import com.android.example.recipeapp.presentation.BaseApplication
 import com.android.example.recipeapp.presentation.components.*
 import com.android.example.recipeapp.presentation.components.util.SnackbarController
@@ -113,34 +114,16 @@ class RecipeListFragment : Fragment() {
                         Column(
                             modifier = Modifier.padding(padding)
                         ) {
-                            Box(
-                                modifier = Modifier
-                                    .fillMaxSize()
-                                    .background(color = MaterialTheme.colors.background)
-                            ) {
-                                if (loading && recipes.isEmpty()) {
-                                    LoadingShimmerList(cardHeight = 250.dp, padding = 8.dp)
-                                } else {
-                                    LazyColumn {
-                                        itemsIndexed(
-                                            items = recipes
-                                        ) { index, item ->
-                                            viewModel.onChangeRecipeScrollPosition(index)
-                                            if ((index + 1) >= (page * PAGE_SIZE) && !loading) {
-                                                viewModel.onTriggerEvent(RecipeListEvent.NextPageEvent)
-                                            }
-                                            RecipeCard(recipe = item, onClick = {})
-                                        }
-                                    }
-                                }
-                                CircularIndeterminateProgressBar(isDisplayed = loading)
-                                DefaultSnackbar(
-                                    snackbarHostState = scaffoldState.snackbarHostState,
-                                    modifier = Modifier.align(Alignment.BottomCenter)
-                                ) {
-                                    scaffoldState.snackbarHostState.currentSnackbarData?.dismiss()
-                                }
-                            }
+                            RecipeList(
+                                loading = loading,
+                                recipes = recipes,
+                                onChangeRecipeScrollPosition = viewModel::onChangeRecipeScrollPosition,
+                                page = page,
+                                onTriggerEvent = viewModel::onTriggerEvent,
+                                scaffoldState = scaffoldState,
+                                snackbarController = snackbarController,
+                                navController = findNavController()
+                            )
 
                         }
                     }
