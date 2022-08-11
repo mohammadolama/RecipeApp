@@ -1,5 +1,6 @@
 package com.android.example.recipeapp.presentation.ui.theme
 
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Typography
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.key.Key.Companion.W
@@ -71,7 +72,6 @@ val QuickSandTypography = Typography(
         fontFamily = QuickSand,
         fontWeight = W400,
         fontSize = 15.sp,
-        color = Color.White
     ),
     caption = TextStyle(
         fontFamily = QuickSand,
