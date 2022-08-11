@@ -1,5 +1,6 @@
 package com.android.example.recipeapp.presentation.ui.recipe_list
 
+import android.util.Log
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.LiveData
@@ -8,12 +9,14 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.android.example.recipeapp.domain.model.Recipe
 import com.android.example.recipeapp.repository.RecipeRepository
+import com.android.example.recipeapp.util.TAG
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 import javax.inject.Named
 
+const val PAGE_SIZE = 30
 
 @HiltViewModel
 class RecipeListViewModel
@@ -32,6 +35,11 @@ class RecipeListViewModel
     var categoryScrollPosition2: Int = 0
 
     val loading = mutableStateOf(false)
+
+    val page = mutableStateOf(1)
+
+    var recipeListScrollPosition = 0
+
 
     init {
 //        loading.value = true
@@ -57,6 +65,45 @@ class RecipeListViewModel
     }
 
 
+    fun nextPage(){
+        viewModelScope.launch {
+            if ((recipeListScrollPosition +1) >= (page.value * PAGE_SIZE)){
+                loading.value = true
+                incrementPage()
+                Log.d(TAG , "NEXT PAGE: triggered: ${page.value}")
+
+                // just a fake delay to see animation
+                delay(1000)
+
+                if (page.value > 1){
+                    val result = repository.search(
+                        token = token,
+                        page = page.value,
+                        query = query.value
+                    )
+                    appendRecipes(result)
+                }
+                loading.value = false
+            }
+        }
+    }
+
+
+    private fun incrementPage() {
+        page.value = page.value + 1
+    }
+
+    fun onChangeRecipeScrollPosition(position: Int) {
+        recipeListScrollPosition = position
+    }
+
+    private fun appendRecipes(recipes: List<Recipe>) {
+        val current = ArrayList(this.recipes.value)
+        current.addAll(recipes)
+        this.recipes.value = current
+    }
+
+
     fun onQueryChanged(query: String) {
         this.query.value = query
     }
@@ -72,13 +119,15 @@ class RecipeListViewModel
         categoryScrollPosition2 = position2
     }
 
-    private fun clearSelectedCategory(){
+    private fun clearSelectedCategory() {
         selectedCategory.value = null
     }
 
-    private fun resetSearchState(){
+    private fun resetSearchState() {
         recipes.value = listOf()
-        if (selectedCategory.value?.value != query.value){
+        page.value = 1
+        onChangeRecipeScrollPosition(0)
+        if (selectedCategory.value?.value != query.value) {
             clearSelectedCategory()
         }
     }
