@@ -45,11 +45,14 @@ import androidx.compose.ui.unit.sp
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import com.android.example.recipeapp.R
 import com.android.example.recipeapp.presentation.BaseApplication
 import com.android.example.recipeapp.presentation.components.*
+import com.android.example.recipeapp.presentation.components.util.SnackbarController
 import com.nimkat.app.ui.theme.AppTheme
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 
@@ -60,6 +63,8 @@ class RecipeListFragment : Fragment() {
     lateinit var application: BaseApplication
 
     val viewModel: RecipeListViewModel by viewModels()
+
+    private var snackbarController = SnackbarController(lifecycleScope)
 
 
     override fun onCreateView(
@@ -85,13 +90,30 @@ class RecipeListFragment : Fragment() {
 
                     val loading = viewModel.loading.value
 
+                    val scaffoldState = rememberScaffoldState()
 
                     Scaffold(
                         topBar = {
                             SearchAppBar(
                                 query = query,
                                 onQueryChanged = viewModel::onQueryChanged,
-                                newSearch = viewModel::newSearch,
+                                newSearch = {
+                                    if (viewModel.selectedCategory.value?.value == "Milk") {
+
+                                        snackbarController.getScope().launch {
+                                            snackbarController.showSnackbar(
+                                                scaffoldState,
+                                                message = "Invalid Category MILK!",
+                                                actionLabel = "Hide",
+                                            )
+                                        }
+                                    } else {
+                                        viewModel.newSearch()
+                                    }
+
+
+                                },
+
                                 focusManager = focusManager,
                                 scrollPosition = viewModel.categoryScrollPosition,
                                 scrollOffset = viewModel.categoryScrollPosition2,
@@ -103,12 +125,11 @@ class RecipeListFragment : Fragment() {
                                     application.toggleLightTheme()
                                 }
                             )
+
                         },
-                        bottomBar = {
-                            MyBottomBar()
-                        },
-                        drawerContent = {
-                            Drawer()
+                        scaffoldState = scaffoldState,
+                        snackbarHost = {
+                            scaffoldState.snackbarHostState
                         }
                     ) { padding ->
                         Column(
@@ -131,6 +152,12 @@ class RecipeListFragment : Fragment() {
                                     }
                                 }
                                 CircularIndeterminateProgressBar(isDisplayed = loading)
+                                DefaultSnackbar(
+                                    snackbarHostState = scaffoldState.snackbarHostState,
+                                    modifier = Modifier.align(Alignment.BottomCenter)
+                                ) {
+                                    scaffoldState.snackbarHostState.currentSnackbarData?.dismiss()
+                                }
                             }
 
                         }
@@ -141,137 +168,5 @@ class RecipeListFragment : Fragment() {
         }
 
         return view
-    }
-}
-
-
-@Composable
-fun MyBottomBar() {
-    BottomNavigation(
-        elevation = 12.dp
-    ) {
-        BottomNavigationItem(
-            icon = { Icon(Icons.Default.BrokenImage, "a") }, selected = false, onClick = {}
-        )
-        BottomNavigationItem(
-            icon = { Icon(Icons.Default.Search, "a") }, selected = true, onClick = {}
-        )
-        BottomNavigationItem(
-            icon = { Icon(Icons.Default.AccountBalanceWallet, "a") }, selected = false, onClick = {}
-        )
-    }
-}
-
-
-
-
-@Composable
-fun Drawer(
-    modifier: Modifier = Modifier
-) {
-
-    val context = LocalContext.current
-
-    Column(
-        modifier
-            .fillMaxSize()
-    ) {
-
-            Image(
-                painterResource(R.drawable.ic_profile),
-                null,
-                Modifier
-                    .size(120.dp)
-                    .align(Alignment.CenterHorizontally)
-                    .padding(0.dp, 24.dp, 0.dp, 0.dp)
-            )
-
-            Text(
-                stringResource(R.string.drawer_title),
-                fontWeight = FontWeight.Bold,
-                fontSize = 20.sp,
-                textAlign = TextAlign.Center,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(0.dp, 12.dp, 0.dp, 0.dp),
-            )
-
-            Spacer(modifier = Modifier.height(16.dp))
-
-            val texts = listOf(
-                R.string.drawer_desc_1,
-                R.string.drawer_desc_2,
-                R.string.drawer_desc_3,
-                R.string.drawer_desc_4
-            )
-
-            for (i in 0 until 4) {
-                Row(modifier = Modifier.padding(16.dp, 4.dp, 16.dp, 4.dp)) {
-                    Icon(
-                        Icons.Outlined.CheckCircle,
-                        null,
-                        modifier = Modifier.padding(0.dp, 0.dp, 0.dp, 0.dp)
-                    )
-                    Spacer(modifier = Modifier.width(4.dp))
-                    Text(
-                        stringResource(texts[i]),
-                        fontSize = 14.sp,
-                        textAlign = TextAlign.Center,
-                    )
-                }
-            }
-
-                Button(
-                    onClick = {
-
-                    },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(16.dp)
-                        .height(60.dp),
-                    shape = RoundedCornerShape(12.dp),
-                ) {
-                    Row {
-                        Text(
-                            text = stringResource(R.string.free_sign_in_login),
-                            fontSize = 20.sp,
-                        )
-                    }
-                }
-
-            Spacer(modifier = Modifier.weight(1F))
-
-
-        Row(
-            modifier = Modifier.padding(20.dp, 5.dp, 20.dp, 20.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Text(
-                text = stringResource(R.string.background_color),
-                fontSize = 16.sp,
-                fontWeight = FontWeight.Bold
-            )
-            Spacer(modifier = Modifier.weight(0.1F))
-            Image(
-                painterResource(R.drawable.ic_day),
-                null,
-                Modifier.size(20.dp)
-            )
-            Switch(
-                checked = false,
-                onCheckedChange = {
-
-                },
-                enabled = true,
-                modifier = Modifier.padding(6.dp, 0.dp, 6.dp, 0.dp)
-            )
-            Image(
-                painterResource(R.drawable.ic_night),
-                null,
-                Modifier.size(20.dp)
-            )
-        }
-
-
     }
 }
