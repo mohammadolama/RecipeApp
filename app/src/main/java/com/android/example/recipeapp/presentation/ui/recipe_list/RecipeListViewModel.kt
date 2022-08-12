@@ -3,16 +3,15 @@ package com.android.example.recipeapp.presentation.ui.recipe_list
 import android.util.Log
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
-import androidx.lifecycle.*
+import androidx.lifecycle.SavedStateHandle
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.android.example.recipeapp.domain.model.Recipe
 import com.android.example.recipeapp.repository.RecipeRepository
 import com.android.example.recipeapp.util.TAG
-import dagger.assisted.Assisted
-import dagger.assisted.AssistedInject
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import java.lang.Exception
 import javax.inject.Inject
 import javax.inject.Named
 
@@ -26,7 +25,6 @@ const val STATE_KEY_SELECTED_CATEGORY = "recipe.state.query.selected_category"
 
 @HiltViewModel
 class RecipeListViewModel
-
 @Inject
 constructor(
     private val repository: RecipeRepository,
@@ -47,20 +45,20 @@ constructor(
 
     val page = mutableStateOf(1)
 
-    var recipeListScrollPosition = 0
+    private var recipeListScrollPosition = 0
 
 
     init {
 
         savedStateHandle.get<Int>(STATE_KEY_PAGE)?.let { p ->
-            Log.d(TAG, "restoring page: ${p}")
+            Log.d(TAG, "restoring page: $p")
             setPage(p)
         }
         savedStateHandle.get<String>(STATE_KEY_QUERY)?.let { q ->
             setQuery(q)
         }
         savedStateHandle.get<Int>(STATE_KEY_LIST_POSITION)?.let { p ->
-            Log.d(TAG, "restoring scroll position: ${p}")
+            Log.d(TAG, "restoring scroll position: $p")
             setListScrollPosition(p)
         }
         savedStateHandle.get<FoodCategory>(STATE_KEY_SELECTED_CATEGORY)?.let { c ->
@@ -178,6 +176,7 @@ constructor(
         setSelectedCategory(null)
     }
 
+
     fun onQueryChanged(query: String) {
         setQuery(query)
     }
@@ -198,22 +197,22 @@ constructor(
 
     private fun setListScrollPosition(position: Int) {
         recipeListScrollPosition = position
-        savedStateHandle.set(STATE_KEY_LIST_POSITION, position)
+        savedStateHandle[STATE_KEY_LIST_POSITION] = position
     }
 
     private fun setPage(page: Int) {
         this.page.value = page
-        savedStateHandle.set(STATE_KEY_PAGE, page)
+        savedStateHandle[STATE_KEY_PAGE] = page
     }
 
     private fun setSelectedCategory(category: FoodCategory?) {
         selectedCategory.value = category
-        savedStateHandle.set(STATE_KEY_SELECTED_CATEGORY, category)
+        savedStateHandle[STATE_KEY_SELECTED_CATEGORY] = category
     }
 
     private fun setQuery(query: String) {
         this.query.value = query
-        savedStateHandle.set(STATE_KEY_QUERY, query)
+        savedStateHandle[STATE_KEY_QUERY] = query
     }
 
 

@@ -13,18 +13,6 @@ enum class FoodCategory(val value: String) {
 }
 
 fun getAllFoodCategories(): List<FoodCategory> {
-//    return listOf(
-//        FoodCategory.CHICKEN,
-//        FoodCategory.BEEF,
-//        FoodCategory.SOUP,
-//        FoodCategory.DESERT,
-//        FoodCategory.VEGETARIAN,
-//        FoodCategory.MILK,
-//        FoodCategory.VEGAN,
-//        FoodCategory.PIZZA,
-//        FoodCategory.DONUT
-//    )
-
     return FoodCategory.values().toList()
 }
 

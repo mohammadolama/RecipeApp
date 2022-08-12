@@ -1,10 +1,9 @@
 package com.android.example.recipeapp.di
 
 import com.android.example.recipeapp.network.RecipeService
-import com.android.example.recipeapp.network.model.RecipeDto
 import com.android.example.recipeapp.network.model.RecipeDtoMapper
 import com.android.example.recipeapp.repository.RecipeRepository
-import com.android.example.recipeapp.repository.RecipeRepository_Impl
+import com.android.example.recipeapp.repository.RecipeRepositoryImpl
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -22,7 +21,7 @@ object RepositoryModule {
         recipeService: RecipeService,
         recipeDtoMapper: RecipeDtoMapper
     ): RecipeRepository {
-        return RecipeRepository_Impl(recipeService, recipeDtoMapper)
+        return RecipeRepositoryImpl(recipeService, recipeDtoMapper)
     }
 
 

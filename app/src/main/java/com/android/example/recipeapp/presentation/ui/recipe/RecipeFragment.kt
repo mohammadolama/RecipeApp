@@ -12,22 +12,17 @@ import androidx.compose.material.Text
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.android.example.recipeapp.presentation.BaseApplication
-import com.android.example.recipeapp.presentation.components.CircularIndeterminateProgressBar
-import com.android.example.recipeapp.presentation.components.DefaultSnackbar
-import com.android.example.recipeapp.presentation.components.LoadingShimmerList
+import com.android.example.recipeapp.presentation.components.shimmer.LoadingShimmerList
 import com.android.example.recipeapp.presentation.components.RecipeView
 import com.android.example.recipeapp.presentation.components.util.SnackbarController
-import com.nimkat.app.ui.theme.AppTheme
+import com.android.example.recipeapp.presentation.ui.theme.AppTheme
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -65,7 +60,7 @@ class RecipeFragment : Fragment() {
                 val loading = viewModel.loading.value
                 val recipe = viewModel.recipe.value
                 val scaffoldState = rememberScaffoldState()
-                AppTheme(darkTheme = application.isDark.value , loading , scaffoldState) {
+                AppTheme(darkTheme = application.isDark.value, loading, scaffoldState) {
                     Scaffold(
                         scaffoldState = scaffoldState,
                         snackbarHost = { scaffoldState.snackbarHostState }

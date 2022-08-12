@@ -4,22 +4,14 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.itemsIndexed
-import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.LocalFocusManager
-import androidx.compose.ui.unit.dp
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -27,7 +19,7 @@ import androidx.navigation.findNavController
 import com.android.example.recipeapp.presentation.BaseApplication
 import com.android.example.recipeapp.presentation.components.*
 import com.android.example.recipeapp.presentation.components.util.SnackbarController
-import com.nimkat.app.ui.theme.AppTheme
+import com.android.example.recipeapp.presentation.ui.theme.AppTheme
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -39,7 +31,7 @@ class RecipeListFragment : Fragment() {
     @Inject
     lateinit var application: BaseApplication
 
-    val viewModel: RecipeListViewModel by viewModels()
+    private val viewModel: RecipeListViewModel by viewModels()
 
     private var snackbarController = SnackbarController(lifecycleScope)
 

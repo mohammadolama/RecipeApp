@@ -9,7 +9,7 @@ class BaseApplication : Application() {
 
     val isDark = mutableStateOf(false)
 
-    fun toggleLightTheme(){
+    fun toggleLightTheme() {
         isDark.value = !isDark.value
     }
 }

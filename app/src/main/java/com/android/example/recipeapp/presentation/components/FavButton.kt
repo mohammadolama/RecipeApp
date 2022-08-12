@@ -2,9 +2,10 @@ package com.android.example.recipeapp.presentation.components
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateColorAsState
-import androidx.compose.animation.core.*
+import androidx.compose.animation.core.animateDp
+import androidx.compose.animation.core.spring
+import androidx.compose.animation.core.updateTransition
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
@@ -81,10 +82,10 @@ fun FavButton() {
         shape = RoundedCornerShape(radius),
         modifier = Modifier.size(borderWidth, 35.dp),
         onClick = {
-            if (currentState == ButtonState.IDLE) {
-                currentState = ButtonState.PRESSED
+            currentState = if (currentState == ButtonState.IDLE) {
+                ButtonState.PRESSED
             } else {
-                currentState = ButtonState.IDLE
+                ButtonState.IDLE
             }
         }
     ) {

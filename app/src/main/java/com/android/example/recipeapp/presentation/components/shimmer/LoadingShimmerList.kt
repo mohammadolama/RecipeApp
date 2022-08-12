@@ -1,4 +1,4 @@
-package com.android.example.recipeapp.presentation.components
+package com.android.example.recipeapp.presentation.components.shimmer
 
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.background
@@ -12,11 +12,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.TileMode
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.android.example.recipeapp.presentation.BaseApplication
-import com.android.example.recipeapp.presentation.components.Shimmer.ShimmerCardItem
 
 @Composable
 fun LoadingShimmerList(
@@ -26,16 +24,14 @@ fun LoadingShimmerList(
     application: BaseApplication
 ) {
 
-    var shimmerColorShades = listOf<Color>()
-
-    if (!application.isDark.value){
-        shimmerColorShades = listOf(
+    val shimmerColorShades: List<Color> = if (!application.isDark.value) {
+        listOf(
             Color.DarkGray.copy(0.4f),
             Color.White,
             Color.DarkGray.copy(0.4f)
         )
-    }else{
-        shimmerColorShades = listOf(
+    } else {
+        listOf(
             Color.LightGray.copy(0.7f),
             Color.White,
             Color.LightGray.copy(0.7f),
@@ -77,19 +73,20 @@ fun LoadingShimmerList(
             }
         })
     } else {
-        recipeFragmentShimmer(cardHeight , brush , brush2 , padding)
+        RecipeFragmentShimmer(cardHeight, brush, brush2, padding)
     }
 
 }
 
 
 @Composable
-fun recipeFragmentShimmer(
+fun RecipeFragmentShimmer(
     cardHeight: Dp,
     brush: Brush,
     brush2: Brush,
-    padding: Dp) {
-    LazyColumn() {
+    padding: Dp
+) {
+    LazyColumn {
         item {
             Surface(
                 shape = MaterialTheme.shapes.small

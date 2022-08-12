@@ -9,13 +9,13 @@ import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.ScaffoldState
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.android.example.recipeapp.R
 import com.android.example.recipeapp.domain.model.Recipe
 import com.android.example.recipeapp.presentation.BaseApplication
+import com.android.example.recipeapp.presentation.components.shimmer.LoadingShimmerList
 import com.android.example.recipeapp.presentation.components.util.SnackbarController
 import com.android.example.recipeapp.presentation.ui.recipe_list.PAGE_SIZE
 import com.android.example.recipeapp.presentation.ui.recipe_list.RecipeListEvent
@@ -40,7 +40,7 @@ fun RecipeList(
             .background(color = MaterialTheme.colors.background)
     ) {
         if (loading && recipes.isEmpty()) {
-            LoadingShimmerList(cardHeight = 250.dp, padding = 8.dp , application = application)
+            LoadingShimmerList(cardHeight = 250.dp, padding = 8.dp, application = application)
         } else {
             LazyColumn {
                 itemsIndexed(

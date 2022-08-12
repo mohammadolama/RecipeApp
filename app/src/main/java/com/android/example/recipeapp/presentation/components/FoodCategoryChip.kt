@@ -1,6 +1,5 @@
 package com.android.example.recipeapp.presentation.components
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.selection.toggleable
@@ -23,7 +22,7 @@ fun FoodCategoryChip(
         modifier = Modifier.padding(end = 8.dp),
         elevation = 8.dp,
         shape = MaterialTheme.shapes.medium,
-        color = if(isSelected) Color.LightGray else MaterialTheme.colors.primary
+        color = if (isSelected) Color.LightGray else MaterialTheme.colors.primary
     ) {
 
         Row(

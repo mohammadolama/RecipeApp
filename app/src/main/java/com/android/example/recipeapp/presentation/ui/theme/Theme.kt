@@ -1,23 +1,18 @@
-package com.nimkat.app.ui.theme
+package com.android.example.recipeapp.presentation.ui.theme
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.ScaffoldState
 import androidx.compose.material.darkColors
 import androidx.compose.material.lightColors
-import androidx.compose.material.ripple.RippleAlpha
-import androidx.compose.material.ripple.RippleTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import com.android.example.recipeapp.presentation.components.CircularIndeterminateProgressBar
 import com.android.example.recipeapp.presentation.components.DefaultSnackbar
-import com.android.example.recipeapp.presentation.ui.theme.AppShape
-import com.android.example.recipeapp.presentation.ui.theme.QuickSandTypography
 
 private val LightThemeColors = lightColors(
     primary = Blue600,
@@ -58,10 +53,11 @@ fun AppTheme(
         colors = if (darkTheme) DarkThemeColors else LightThemeColors,
         typography = QuickSandTypography,
         shapes = AppShape
-    ){
-        Box(modifier = Modifier
-            .fillMaxSize()
-            .background(if(!darkTheme) Grey1 else Color.Black)
+    ) {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(if (!darkTheme) Grey1 else Color.Black)
         ) {
             content()
             CircularIndeterminateProgressBar(isDisplayed = loading)

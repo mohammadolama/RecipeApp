@@ -4,7 +4,7 @@ import com.android.example.recipeapp.domain.model.Recipe
 import com.android.example.recipeapp.network.RecipeService
 import com.android.example.recipeapp.network.model.RecipeDtoMapper
 
-class RecipeRepository_Impl(
+class RecipeRepositoryImpl(
     private val recipeService: RecipeService,
     private val mapper: RecipeDtoMapper
 ) : RecipeRepository {

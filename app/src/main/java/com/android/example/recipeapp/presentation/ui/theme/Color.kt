@@ -1,4 +1,4 @@
-package com.nimkat.app.ui.theme
+package com.android.example.recipeapp.presentation.ui.theme
 
 import androidx.compose.ui.graphics.Color
 
