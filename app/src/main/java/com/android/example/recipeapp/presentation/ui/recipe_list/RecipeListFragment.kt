@@ -54,22 +54,29 @@ class RecipeListFragment : Fragment() {
 
         view.apply {
             setContent {
-                AppTheme(darkTheme = application.isDark.value) {
-                    val recipes = viewModel.recipes.value
 
-                    val query = viewModel.query.value
+                val recipes = viewModel.recipes.value
 
-                    val focusManager = LocalFocusManager.current
+                val query = viewModel.query.value
 
-                    val selectedCategory = viewModel.selectedCategory.value
+                val focusManager = LocalFocusManager.current
 
-                    val scope = rememberCoroutineScope()
+                val selectedCategory = viewModel.selectedCategory.value
 
-                    val loading = viewModel.loading.value
+                val scope = rememberCoroutineScope()
 
-                    val page = viewModel.page.value
+                val loading = viewModel.loading.value
 
-                    val scaffoldState = rememberScaffoldState()
+                val page = viewModel.page.value
+
+                val scaffoldState = rememberScaffoldState()
+
+                AppTheme(
+                    darkTheme = application.isDark.value,
+                    loading = loading,
+                    scaffoldState = scaffoldState
+                ) {
+
 
                     Scaffold(
                         topBar = {
@@ -78,7 +85,6 @@ class RecipeListFragment : Fragment() {
                                 onQueryChanged = viewModel::onQueryChanged,
                                 newSearch = {
                                     if (viewModel.selectedCategory.value?.value == "Milk") {
-
                                         snackbarController.getScope().launch {
                                             snackbarController.showSnackbar(
                                                 scaffoldState,
@@ -89,8 +95,6 @@ class RecipeListFragment : Fragment() {
                                     } else {
                                         viewModel.onTriggerEvent(RecipeListEvent.NewSearchEvent)
                                     }
-
-
                                 },
 
                                 focusManager = focusManager,
@@ -122,7 +126,8 @@ class RecipeListFragment : Fragment() {
                                 onTriggerEvent = viewModel::onTriggerEvent,
                                 scaffoldState = scaffoldState,
                                 snackbarController = snackbarController,
-                                navController = findNavController()
+                                navController = findNavController(),
+                                application = application
                             )
 
                         }

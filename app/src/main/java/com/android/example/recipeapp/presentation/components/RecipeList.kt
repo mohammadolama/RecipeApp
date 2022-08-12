@@ -15,6 +15,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.android.example.recipeapp.R
 import com.android.example.recipeapp.domain.model.Recipe
+import com.android.example.recipeapp.presentation.BaseApplication
 import com.android.example.recipeapp.presentation.components.util.SnackbarController
 import com.android.example.recipeapp.presentation.ui.recipe_list.PAGE_SIZE
 import com.android.example.recipeapp.presentation.ui.recipe_list.RecipeListEvent
@@ -30,6 +31,7 @@ fun RecipeList(
     scaffoldState: ScaffoldState,
     snackbarController: SnackbarController,
     navController: NavController,
+    application: BaseApplication
 ) {
 
     Box(
@@ -38,7 +40,7 @@ fun RecipeList(
             .background(color = MaterialTheme.colors.background)
     ) {
         if (loading && recipes.isEmpty()) {
-            LoadingShimmerList(cardHeight = 250.dp, padding = 8.dp)
+            LoadingShimmerList(cardHeight = 250.dp, padding = 8.dp , application = application)
         } else {
             LazyColumn {
                 itemsIndexed(
@@ -69,13 +71,7 @@ fun RecipeList(
                 }
             }
         }
-        CircularIndeterminateProgressBar(isDisplayed = loading)
-        DefaultSnackbar(
-            snackbarHostState = scaffoldState.snackbarHostState,
-            modifier = Modifier.align(Alignment.BottomCenter)
-        ) {
-            scaffoldState.snackbarHostState.currentSnackbarData?.dismiss()
-        }
+
     }
 
 }
