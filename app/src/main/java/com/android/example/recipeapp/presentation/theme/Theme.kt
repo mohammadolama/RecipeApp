@@ -1,4 +1,4 @@
-package com.android.example.recipeapp.presentation.ui.theme
+package com.android.example.recipeapp.presentation.theme
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box

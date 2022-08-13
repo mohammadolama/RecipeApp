@@ -21,10 +21,10 @@ fun LoadingShimmerList(
     cardHeight: Dp,
     padding: Dp,
     forRecipeFragment: Boolean = false,
-    application: BaseApplication
-) {
+    isDark: Boolean,
+    ) {
 
-    val shimmerColorShades: List<Color> = if (!application.isDark.value) {
+    val shimmerColorShades: List<Color> = if (!isDark) {
         listOf(
             Color.DarkGray.copy(0.4f),
             Color.White,

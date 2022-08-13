@@ -17,6 +17,7 @@ import com.android.example.recipeapp.domain.model.Recipe
 import com.android.example.recipeapp.presentation.BaseApplication
 import com.android.example.recipeapp.presentation.components.shimmer.LoadingShimmerList
 import com.android.example.recipeapp.presentation.components.util.SnackbarController
+import com.android.example.recipeapp.presentation.navigation.Screen
 import com.android.example.recipeapp.presentation.ui.recipe_list.PAGE_SIZE
 import com.android.example.recipeapp.presentation.ui.recipe_list.RecipeListEvent
 import kotlinx.coroutines.launch
@@ -30,8 +31,8 @@ fun RecipeList(
     onTriggerEvent: (RecipeListEvent) -> Unit,
     scaffoldState: ScaffoldState,
     snackbarController: SnackbarController,
-    navController: NavController,
-    application: BaseApplication
+    isDark: Boolean,
+    onNavigateToRecipeDetailScreen: (String) -> Unit
 ) {
 
     Box(
@@ -40,7 +41,7 @@ fun RecipeList(
             .background(color = MaterialTheme.colors.background)
     ) {
         if (loading && recipes.isEmpty()) {
-            LoadingShimmerList(cardHeight = 250.dp, padding = 8.dp, application = application)
+            LoadingShimmerList(cardHeight = 250.dp, padding = 8.dp, isDark = isDark)
         } else {
             LazyColumn {
                 itemsIndexed(
@@ -54,9 +55,8 @@ fun RecipeList(
                         recipe = recipe,
                         onClick = {
                             if (recipe.id != null) {
-                                val bundle = Bundle()
-                                bundle.putInt("recipeID", recipe.id!!)
-                                navController.navigate(R.id.viewRecipe, bundle)
+                                val route = Screen.RecipeDetail.route + "/${recipe.id}"
+                                onNavigateToRecipeDetailScreen(route)
                             } else {
                                 snackbarController.getScope().launch {
                                     snackbarController.showSnackbar(
