@@ -5,40 +5,33 @@ import com.google.gson.annotations.SerializedName
 data class RecipeDto(
 
     @SerializedName("pk")
-    var pk: Int? = null,
+    var pk: Int,
 
     @SerializedName("title")
-    var title: String? = null,
+    var title: String,
 
     @SerializedName("publisher")
-    var publisher: String? = null,
+    var publisher: String,
 
     @SerializedName("featured_image")
-    var featuredImage: String? = null,
-
+    var featuredImage: String,
 
     @SerializedName("rating")
-    var rating: Int? = 0,
+    var rating: Int,
 
     @SerializedName("source_url")
-    var sourceUrl: String? = null,
-
-    @SerializedName("description")
-    var description: String? = null,
-
-    @SerializedName("cooking_instructions")
-    var cookingInstructions: String? = null,
+    var sourceUrl: String,
 
     @SerializedName("ingredients")
-    var ingredients: List<String>? = listOf(),
+    var ingredients: List<String> = listOf(),
 
-    @SerializedName("date_added")
-    var dateAdded: String? = null,
+    @SerializedName("long_date_added")
+    var longDateAdded: Long,
 
-    @SerializedName("date_updated")
-    var dateUpdated: String? = null,
+    @SerializedName("long_date_updated")
+    var longDateUpdated: Long,
 ) {
     override fun toString(): String {
-        return "RecipeNetworkEntity(pk=$pk, title=$title, publisher=$publisher, rating=$rating, description=$description)"
+        return "RecipeNetworkEntity(pk=$pk, title=$title, publisher=$publisher, rating=$rating)"
     }
 }

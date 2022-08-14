@@ -28,7 +28,7 @@ fun RecipeView(
             .fillMaxWidth()
     ) {
         item {
-            recipe.featuredImage?.let { url ->
+            recipe.featuredImage.let { url ->
                 val image = loadPicture(url = url, default = DEFAULT_RECIPE_IMAGE).value
                 image?.let { img ->
                     Image(
@@ -47,7 +47,7 @@ fun RecipeView(
                     .fillMaxWidth()
                     .padding(8.dp)
             ) {
-                recipe.title?.let { title ->
+                recipe.title.let { title ->
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
@@ -71,43 +71,20 @@ fun RecipeView(
                         )
                     }
                 }
-                recipe.publisher?.let { publisher ->
+                recipe.publisher.let { publisher ->
                     val updated = recipe.dateUpdated
                     Text(
-                        text = if (updated != null) {
-                            "Updated $updated by $publisher"
-                        } else {
-                            "By $publisher"
-                        },
+                        text = "Updated $updated by $publisher",
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(bottom = 8.dp),
                         style = MaterialTheme.typography.caption
                     )
                 }
-                recipe.description?.let { description ->
-                    if (description != "N/A") {
-                        Text(
-                            text = description,
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(bottom = 8.dp),
-                            style = MaterialTheme.typography.body1
-                        )
-                    }
-                }
+
                 for (ingredient in recipe.ingredients) {
                     Text(
                         text = ingredient,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(bottom = 4.dp),
-                        style = MaterialTheme.typography.body1
-                    )
-                }
-                recipe.cookingInstructions?.let { instructions ->
-                    Text(
-                        text = instructions,
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(bottom = 4.dp),

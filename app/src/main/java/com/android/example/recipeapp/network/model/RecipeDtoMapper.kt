@@ -2,6 +2,7 @@ package com.android.example.recipeapp.network.model
 
 import com.android.example.recipeapp.domain.model.Recipe
 import com.android.example.recipeapp.domain.util.DomainMapper
+import com.android.example.recipeapp.util.DateUtils
 
 class RecipeDtoMapper : DomainMapper<RecipeDto, Recipe> {
     override fun mapToDomainModel(entity: RecipeDto): Recipe {
@@ -12,11 +13,9 @@ class RecipeDtoMapper : DomainMapper<RecipeDto, Recipe> {
             featuredImage = entity.featuredImage,
             rating = entity.rating,
             sourceUrl = entity.sourceUrl,
-            description = entity.description,
-            cookingInstructions = entity.cookingInstructions,
             ingredients = entity.ingredients ?: listOf(),
-            dateAdded = entity.dateAdded,
-            dateUpdated = entity.dateUpdated
+            dateAdded = DateUtils.longToDate(entity.longDateAdded),
+            dateUpdated = DateUtils.longToDate(entity.longDateUpdated)
         )
     }
 
@@ -28,11 +27,9 @@ class RecipeDtoMapper : DomainMapper<RecipeDto, Recipe> {
             featuredImage = domainModel.featuredImage,
             rating = domainModel.rating,
             sourceUrl = domainModel.sourceUrl,
-            description = domainModel.description,
-            cookingInstructions = domainModel.cookingInstructions,
             ingredients = domainModel.ingredients,
-            dateAdded = domainModel.dateAdded,
-            dateUpdated = domainModel.dateUpdated
+            longDateAdded = DateUtils.dateToLong(domainModel.dateAdded),
+            longDateUpdated = DateUtils.dateToLong(domainModel.dateUpdated)
         )
     }
 

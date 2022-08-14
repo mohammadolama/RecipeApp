@@ -2,23 +2,20 @@ package com.android.example.recipeapp.domain.model
 
 import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
+import java.util.*
 
 
 @Parcelize
 data class Recipe(
-    var id: Int? = null,
-    var title: String? = null,
-    var publisher: String? = null,
-    var featuredImage: String? = null,
-    var rating: Int? = 0,
-    var sourceUrl: String? = null,
-    var description: String? = null,
-    var cookingInstructions: String? = null,
+    var id: Int,
+    var title: String,
+    var publisher: String,
+    var featuredImage: String,
+    var rating: Int,
+    var sourceUrl: String,
     var ingredients: List<String> = listOf(),
-    var dateAdded: String? = null,
-    var dateUpdated: String? = null,
-
-
+    var dateAdded: Date,
+    var dateUpdated: Date,
     ) : Parcelable {
 
 }
