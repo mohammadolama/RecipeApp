@@ -9,6 +9,7 @@ import androidx.lifecycle.viewModelScope
 import com.android.example.recipeapp.domain.model.Recipe
 import com.android.example.recipeapp.interactors.recipe_list.RestoreRecipes
 import com.android.example.recipeapp.interactors.recipe_list.SearchRecipes
+import com.android.example.recipeapp.presentation.ui.util.DialogQueue
 import com.android.example.recipeapp.util.TAG
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
@@ -51,6 +52,8 @@ constructor(
     val page = mutableStateOf(1)
 
     private var recipeListScrollPosition = 0
+
+    val dialogQueue = DialogQueue()
 
 
     init {
@@ -112,7 +115,7 @@ constructor(
 
                 dataState.error?.let { error ->
                     Log.e(TAG, "restore State: ${error}")
-//                    TODO("ADADADA")
+                    dialogQueue.appendErrorMessage(title = "Error", error)
                 }
             }.launchIn(viewModelScope)
     }
@@ -130,8 +133,7 @@ constructor(
 
                 dataState.error?.let { error ->
                     Log.e(TAG, "new Search: ${error}")
-//                    TODO("ADADADA")
-                }
+                    dialogQueue.appendErrorMessage(title = "Error", error)                }
             }.launchIn(viewModelScope)
 
 
@@ -154,8 +156,7 @@ constructor(
 
                         dataState.error?.let { error ->
                             Log.e(TAG, "NEXT PAGE: ${error}")
-//                            TODO("ADADADA")
-                        }
+                            dialogQueue.appendErrorMessage(title = "Error", error)                        }
                     }.launchIn(viewModelScope)
             }
         }

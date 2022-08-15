@@ -21,6 +21,7 @@ import com.android.example.recipeapp.presentation.components.RecipeList
 import com.android.example.recipeapp.presentation.components.SearchAppBar
 import com.android.example.recipeapp.presentation.components.util.SnackbarController
 import com.android.example.recipeapp.presentation.ui.theme.AppTheme
+import com.android.example.recipeapp.presentation.ui.util.DialogQueue
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -35,6 +36,13 @@ class RecipeListFragment : Fragment() {
 
     private var snackbarController = SnackbarController(lifecycleScope)
 
+    lateinit var dialogQueue: DialogQueue
+
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        dialogQueue = viewModel.dialogQueue
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -66,7 +74,8 @@ class RecipeListFragment : Fragment() {
                 AppTheme(
                     darkTheme = application.isDark.value,
                     loading = loading,
-                    scaffoldState = scaffoldState
+                    scaffoldState = scaffoldState,
+                    dialogQueue = dialogQueue.queue.value
                 ) {
 
 
@@ -76,7 +85,7 @@ class RecipeListFragment : Fragment() {
                                 query = query,
                                 onQueryChanged = viewModel::onQueryChanged,
                                 newSearch = {
-                                        viewModel.onTriggerEvent(RecipeListEvent.NewSearchEvent)
+                                    viewModel.onTriggerEvent(RecipeListEvent.NewSearchEvent)
                                 },
 
                                 focusManager = focusManager,

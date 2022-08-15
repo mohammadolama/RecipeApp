@@ -14,6 +14,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import com.android.example.recipeapp.presentation.components.*
+import com.android.example.recipeapp.presentation.ui.util.DialogQueue
+import kotlinx.coroutines.delay
+import java.util.*
 
 private val LightThemeColors = lightColors(
     primary = Blue600,
@@ -48,6 +51,7 @@ fun AppTheme(
     darkTheme: Boolean,
     loading: Boolean,
     scaffoldState: ScaffoldState,
+    dialogQueue: Queue<GenericDialogInfo>,
     content: @Composable () -> Unit,
 ) {
     MaterialTheme(
@@ -68,25 +72,24 @@ fun AppTheme(
             ) {
                 scaffoldState.snackbarHostState.currentSnackbarData?.dismiss()
             }
-
-            val isShowing = remember { mutableStateOf(true) }
-            if (isShowing.value) {
-                GenericDialog(
-                    onDismiss = { isShowing.value = false },
-                    title = "Error",
-                    description = "Hey new Error",
-                    positiveAction = PositiveAction(
-                        positiveBtnText = "Ok",
-                        onPositiveBtnAction = { isShowing.value = false }
-                    ),
-                    negativeAction = NegativeAction(
-                        negativeBtnText = "Cancle",
-                        onNegativeBtnAction = { isShowing.value = false }
-                    )
-                )
-            }
+            ProcessDialgoQueue(dialogQueue = dialogQueue)
         }
 
     }
 }
 
+
+@Composable
+fun ProcessDialgoQueue(
+    dialogQueue: Queue<GenericDialogInfo>
+){
+    dialogQueue.peek()?.let { dialogInfo ->
+        GenericDialog(
+            onDismiss = dialogInfo.onDismiss,
+            title = dialogInfo.title,
+            description = dialogInfo.description,
+            positiveAction = dialogInfo.positiveAction,
+            negativeAction = dialogInfo.negativeAction
+        )
+    }
+}

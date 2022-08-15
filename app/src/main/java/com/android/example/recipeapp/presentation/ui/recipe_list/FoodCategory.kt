@@ -1,6 +1,7 @@
 package com.android.example.recipeapp.presentation.ui.recipe_list
 
 enum class FoodCategory(val value: String) {
+    ERROR("Error"),
     CHICKEN("Chicken"),
     BEEF("Beef"),
     SOUP("Soup"),

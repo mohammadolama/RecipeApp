@@ -8,6 +8,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.android.example.recipeapp.domain.model.Recipe
 import com.android.example.recipeapp.interactors.recipe.GetRecipe
+import com.android.example.recipeapp.presentation.ui.util.DialogQueue
 import com.android.example.recipeapp.util.TAG
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
@@ -33,6 +34,8 @@ constructor(
     val recipe: MutableState<Recipe?> = mutableStateOf(null)
 
     val loading = mutableStateOf(false)
+
+    val dialogQueue = DialogQueue()
 
     init {
         // restore if process dies
@@ -71,8 +74,7 @@ constructor(
 
             dataState.error?.let { error ->
                 Log.e(TAG, "NEXT PAGE: ${error}")
-//                            TODO("ADADADA")
-            }
+                dialogQueue.appendErrorMessage(title = "Error", error)            }
 
 
         }.launchIn(viewModelScope)

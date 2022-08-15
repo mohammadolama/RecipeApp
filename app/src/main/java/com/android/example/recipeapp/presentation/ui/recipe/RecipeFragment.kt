@@ -23,6 +23,7 @@ import com.android.example.recipeapp.presentation.components.shimmer.LoadingShim
 import com.android.example.recipeapp.presentation.components.RecipeView
 import com.android.example.recipeapp.presentation.components.util.SnackbarController
 import com.android.example.recipeapp.presentation.ui.theme.AppTheme
+import com.android.example.recipeapp.presentation.ui.util.DialogQueue
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -38,12 +39,15 @@ class RecipeFragment : Fragment() {
 
     private var recipeID: MutableState<Int> = mutableStateOf(-1)
 
+    lateinit var dialogQueue : DialogQueue
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.getInt("recipeID")?.let { rID ->
             recipeID.value = rID
             viewModel.onTriggerEvent(RecipeEvent.GetRecipeEvent(rID))
         }
+        dialogQueue = viewModel.dialogQueue
     }
 
     override fun onCreateView(
@@ -60,7 +64,12 @@ class RecipeFragment : Fragment() {
                 val loading = viewModel.loading.value
                 val recipe = viewModel.recipe.value
                 val scaffoldState = rememberScaffoldState()
-                AppTheme(darkTheme = application.isDark.value, loading, scaffoldState) {
+                AppTheme(
+                    darkTheme = application.isDark.value,
+                    loading = loading,
+                    scaffoldState = scaffoldState,
+                    dialogQueue = dialogQueue.queue.value
+                ) {
                     Scaffold(
                         scaffoldState = scaffoldState,
                         snackbarHost = { scaffoldState.snackbarHostState }
