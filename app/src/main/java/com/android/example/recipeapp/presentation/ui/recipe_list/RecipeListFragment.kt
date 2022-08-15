@@ -17,11 +17,11 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.findNavController
 import com.android.example.recipeapp.presentation.BaseApplication
-import com.android.example.recipeapp.presentation.components.*
+import com.android.example.recipeapp.presentation.components.RecipeList
+import com.android.example.recipeapp.presentation.components.SearchAppBar
 import com.android.example.recipeapp.presentation.components.util.SnackbarController
 import com.android.example.recipeapp.presentation.ui.theme.AppTheme
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 
@@ -76,17 +76,7 @@ class RecipeListFragment : Fragment() {
                                 query = query,
                                 onQueryChanged = viewModel::onQueryChanged,
                                 newSearch = {
-                                    if (viewModel.selectedCategory.value?.value == "Milk") {
-                                        snackbarController.getScope().launch {
-                                            snackbarController.showSnackbar(
-                                                scaffoldState,
-                                                message = "Invalid Category MILK!",
-                                                actionLabel = "Hide",
-                                            )
-                                        }
-                                    } else {
                                         viewModel.onTriggerEvent(RecipeListEvent.NewSearchEvent)
-                                    }
                                 },
 
                                 focusManager = focusManager,

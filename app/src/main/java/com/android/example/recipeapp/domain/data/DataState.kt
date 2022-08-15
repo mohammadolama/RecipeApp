@@ -10,7 +10,7 @@ data class DataState<out T>(
             return DataState(data = data)
         }
 
-        fun <T> error(data: T?, message: String): DataState<T> {
+        fun <T> error(message: String , data: T? = null, ): DataState<T> {
             return DataState(data = data, error = message)
         }
 

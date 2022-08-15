@@ -6,12 +6,13 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.android.example.recipeapp.cache.RecipeDAO
 import com.android.example.recipeapp.domain.model.Recipe
-import com.android.example.recipeapp.repository.RecipeRepository
+import com.android.example.recipeapp.interactors.recipe_list.RestoreRecipes
+import com.android.example.recipeapp.interactors.recipe_list.SearchRecipes
 import com.android.example.recipeapp.util.TAG
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 import javax.inject.Named
@@ -28,11 +29,13 @@ const val STATE_KEY_SELECTED_CATEGORY = "recipe.state.query.selected_category"
 class RecipeListViewModel
 @Inject
 constructor(
-    private val repository: RecipeRepository,
+    private val searchRecipes: SearchRecipes,
+    private val restoreRecipes: RestoreRecipes,
     @Named("auth_token") private val token: String,
     private val savedStateHandle: SavedStateHandle,
 
-) : ViewModel() {
+
+    ) : ViewModel() {
 
     val recipes: MutableState<List<Recipe>> = mutableStateOf(listOf())
 
@@ -97,57 +100,64 @@ constructor(
         }
     }
 
-    private suspend fun restoreState() {
-        loading.value = true
-        // Must retrieve each page of results.
-        val results: MutableList<Recipe> = mutableListOf()
-        for (p in 1..page.value) {
-            Log.d(TAG, "restoreState: page: ${p}, query: ${query.value}")
-            val result = repository.search(token = token, page = p, query = query.value)
-            results.addAll(result)
-            if (p == page.value) { // done
-                recipes.value = results
-                loading.value = false
-            }
-        }
+    private fun restoreState() {
+
+        restoreRecipes
+            .excute(page = page.value, query = query.value)
+            .onEach { dataState ->
+                loading.value = dataState.loading
+                dataState.data?.let { list ->
+                    recipes.value = list
+                }
+
+                dataState.error?.let { error ->
+                    Log.e(TAG, "restore State: ${error}")
+//                    TODO("ADADADA")
+                }
+            }.launchIn(viewModelScope)
     }
 
-    private suspend fun newSearch() {
-        loading.value = true
+    private fun newSearch() {
+
         resetSearchState()
-        delay(1000)
+        searchRecipes
+            .excute(token = token, page = page.value, query = query.value)
+            .onEach { dataState ->
+                loading.value = dataState.loading
+                dataState.data?.let { list ->
+                    recipes.value = list
+                }
 
-        val result = repository.search(
-            token = token,
-            page = 1,
-            query = query.value
-        )
+                dataState.error?.let { error ->
+                    Log.e(TAG, "new Search: ${error}")
+//                    TODO("ADADADA")
+                }
+            }.launchIn(viewModelScope)
 
-        recipes.value = result
-
-        loading.value = false
 
     }
 
 
     private suspend fun nextPage() {
         if ((recipeListScrollPosition + 1) >= (page.value * PAGE_SIZE)) {
-            loading.value = true
             incrementPage()
             Log.d(TAG, "NEXT PAGE: triggered: ${page.value}")
 
-            // just a fake delay to see animation
-            delay(1000)
-
             if (page.value > 1) {
-                val result = repository.search(
-                    token = token,
-                    page = page.value,
-                    query = query.value
-                )
-                appendRecipes(result)
+                searchRecipes
+                    .excute(token = token, page = page.value, query = query.value)
+                    .onEach { dataState ->
+                        loading.value = dataState.loading
+                        dataState.data?.let { list ->
+                            appendRecipes(list)
+                        }
+
+                        dataState.error?.let { error ->
+                            Log.e(TAG, "NEXT PAGE: ${error}")
+//                            TODO("ADADADA")
+                        }
+                    }.launchIn(viewModelScope)
             }
-            loading.value = false
         }
 
     }

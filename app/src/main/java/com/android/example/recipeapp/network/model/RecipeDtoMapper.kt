@@ -13,7 +13,7 @@ class RecipeDtoMapper : DomainMapper<RecipeDto, Recipe> {
             featuredImage = entity.featuredImage,
             rating = entity.rating,
             sourceUrl = entity.sourceUrl,
-            ingredients = entity.ingredients ?: listOf(),
+            ingredients = entity.ingredients,
             dateAdded = DateUtils.longToDate(entity.longDateAdded),
             dateUpdated = DateUtils.longToDate(entity.longDateUpdated)
         )

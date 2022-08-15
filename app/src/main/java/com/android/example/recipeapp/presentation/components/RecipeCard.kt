@@ -37,7 +37,7 @@ fun RecipeCard(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             // todo use asyncImage composable !
-            recipe.featuredImage?.let { url ->
+            recipe.featuredImage.let { url ->
                 val image = loadPicture(url = url)
                 image.let { img ->
                     img.value?.let {
@@ -53,7 +53,7 @@ fun RecipeCard(
                 }
 
             }
-            recipe.title?.let { title ->
+            recipe.title.let { title ->
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()

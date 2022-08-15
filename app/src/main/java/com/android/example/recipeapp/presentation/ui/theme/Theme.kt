@@ -8,11 +8,12 @@ import androidx.compose.material.ScaffoldState
 import androidx.compose.material.darkColors
 import androidx.compose.material.lightColors
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import com.android.example.recipeapp.presentation.components.CircularIndeterminateProgressBar
-import com.android.example.recipeapp.presentation.components.DefaultSnackbar
+import com.android.example.recipeapp.presentation.components.*
 
 private val LightThemeColors = lightColors(
     primary = Blue600,
@@ -66,6 +67,23 @@ fun AppTheme(
                 modifier = Modifier.align(Alignment.BottomCenter)
             ) {
                 scaffoldState.snackbarHostState.currentSnackbarData?.dismiss()
+            }
+
+            val isShowing = remember { mutableStateOf(true) }
+            if (isShowing.value) {
+                GenericDialog(
+                    onDismiss = { isShowing.value = false },
+                    title = "Error",
+                    description = "Hey new Error",
+                    positiveAction = PositiveAction(
+                        positiveBtnText = "Ok",
+                        onPositiveBtnAction = { isShowing.value = false }
+                    ),
+                    negativeAction = NegativeAction(
+                        negativeBtnText = "Cancle",
+                        onNegativeBtnAction = { isShowing.value = false }
+                    )
+                )
             }
         }
 

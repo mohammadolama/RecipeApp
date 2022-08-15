@@ -41,6 +41,8 @@ fun RecipeList(
     ) {
         if (loading && recipes.isEmpty()) {
             LoadingShimmerList(cardHeight = 250.dp, padding = 8.dp, application = application)
+        }else if ((recipes.isEmpty())){
+            NothingHere()
         } else {
             LazyColumn {
                 itemsIndexed(
@@ -55,7 +57,7 @@ fun RecipeList(
                         onClick = {
                             if (recipe.id != null) {
                                 val bundle = Bundle()
-                                bundle.putInt("recipeID", recipe.id!!)
+                                bundle.putInt("recipeID", recipe.id)
                                 navController.navigate(R.id.viewRecipe, bundle)
                             } else {
                                 snackbarController.getScope().launch {

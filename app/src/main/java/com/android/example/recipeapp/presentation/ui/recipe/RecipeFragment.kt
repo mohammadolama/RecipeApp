@@ -80,15 +80,7 @@ class RecipeFragment : Fragment() {
                                 )
                             } else {
                                 recipe?.let {
-                                    if (it.id == 1) {
-                                        snackbarController.showSnackbar(
-                                            scaffoldState = scaffoldState,
-                                            message = "An error occurred with this recipe",
-                                            actionLabel = "OK"
-                                        )
-                                    } else {
-                                        RecipeView(recipe = it)
-                                    }
+                                    RecipeView(recipe = it)
                                 }
                             }
                         }
