@@ -39,7 +39,9 @@ class RecipeFragment : Fragment() {
 
     private var recipeID: MutableState<Int> = mutableStateOf(-1)
 
-    lateinit var dialogQueue : DialogQueue
+    lateinit var dialogQueue: DialogQueue
+
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -66,6 +68,7 @@ class RecipeFragment : Fragment() {
                 val scaffoldState = rememberScaffoldState()
                 AppTheme(
                     darkTheme = application.isDark.value,
+                    isNetworkAvailable = viewModel.isNetworkHasConnectivity,
                     loading = loading,
                     scaffoldState = scaffoldState,
                     dialogQueue = dialogQueue.queue.value

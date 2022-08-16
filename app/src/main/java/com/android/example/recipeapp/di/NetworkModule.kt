@@ -2,6 +2,8 @@ package com.android.example.recipeapp.di
 
 import com.android.example.recipeapp.network.RecipeService
 import com.android.example.recipeapp.network.model.RecipeDtoMapper
+import com.android.example.recipeapp.presentation.BaseApplication
+import com.android.example.recipeapp.presentation.ui.util.ConnectivityManager
 import com.google.gson.GsonBuilder
 import dagger.Module
 import dagger.Provides
@@ -50,6 +52,12 @@ object NetworkModule {
     @Named("auth_token")
     fun provideAuthToken(): String {
         return "Token 9c8b06d329136da358c2d00e76946b0111ce2c48"
+    }
+
+    @Singleton
+    @Provides
+    fun provideConnectivityManager(app: BaseApplication) : ConnectivityManager {
+        return ConnectivityManager(app)
     }
 
 }

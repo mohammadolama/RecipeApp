@@ -7,7 +7,7 @@ import com.android.example.recipeapp.domain.data.DataState
 import com.android.example.recipeapp.domain.model.Recipe
 import com.android.example.recipeapp.network.RecipeService
 import com.android.example.recipeapp.network.model.RecipeDtoMapper
-import com.android.example.recipeapp.util.TAG
+import com.android.example.recipeapp.util.MY_TAG
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
@@ -47,7 +47,7 @@ class GetRecipe(
 
 
         } catch (e: Exception) {
-            Log.d(TAG, "excute: ${e.message} ")
+            Log.d(MY_TAG, "excute: ${e.message} ")
             emit(DataState.error<Recipe>(e.message ?: "unknown error"))
         }
     }

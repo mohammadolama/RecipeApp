@@ -8,7 +8,7 @@ import com.android.example.recipeapp.domain.model.Recipe
 import com.android.example.recipeapp.util.RECIPE_PAGINATION_PAGE_SIZE
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
-import com.android.example.recipeapp.util.TAG
+import com.android.example.recipeapp.util.MY_TAG
 import kotlinx.coroutines.delay
 
 
@@ -48,7 +48,7 @@ class RestoreRecipes(
 
 
         } catch (e: Exception) {
-            Log.d(TAG, "excute: ${e.message} ")
+            Log.d(MY_TAG, "excute: ${e.message} ")
             emit(DataState.error<List<Recipe>>(e.message ?: "unknown error"))
         }
 

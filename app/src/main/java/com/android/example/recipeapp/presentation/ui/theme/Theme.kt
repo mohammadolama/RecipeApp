@@ -2,6 +2,7 @@ package com.android.example.recipeapp.presentation.ui.theme
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.ScaffoldState
@@ -49,6 +50,7 @@ private val DarkThemeColors = darkColors(
 @Composable
 fun AppTheme(
     darkTheme: Boolean,
+    isNetworkAvailable: Boolean,
     loading: Boolean,
     scaffoldState: ScaffoldState,
     dialogQueue: Queue<GenericDialogInfo>,
@@ -64,7 +66,10 @@ fun AppTheme(
                 .fillMaxSize()
                 .background(if (!darkTheme) Grey1 else Color.Black)
         ) {
-            content()
+            Column() {
+                ConnectivityMonitor(isNetworkAvailable = isNetworkAvailable)
+                content()
+            }
             CircularIndeterminateProgressBar(isDisplayed = loading)
             DefaultSnackbar(
                 snackbarHostState = scaffoldState.snackbarHostState,

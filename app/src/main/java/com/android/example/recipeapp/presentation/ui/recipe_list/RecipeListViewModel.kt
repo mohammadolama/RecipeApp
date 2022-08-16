@@ -3,14 +3,16 @@ package com.android.example.recipeapp.presentation.ui.recipe_list
 import android.util.Log
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.android.example.recipeapp.domain.model.Recipe
 import com.android.example.recipeapp.interactors.recipe_list.RestoreRecipes
 import com.android.example.recipeapp.interactors.recipe_list.SearchRecipes
+import com.android.example.recipeapp.presentation.ui.util.ConnectivityManager
 import com.android.example.recipeapp.presentation.ui.util.DialogQueue
-import com.android.example.recipeapp.util.TAG
+import com.android.example.recipeapp.util.MY_TAG
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -34,8 +36,6 @@ constructor(
     private val restoreRecipes: RestoreRecipes,
     @Named("auth_token") private val token: String,
     private val savedStateHandle: SavedStateHandle,
-
-
     ) : ViewModel() {
 
     val recipes: MutableState<List<Recipe>> = mutableStateOf(listOf())
@@ -59,14 +59,14 @@ constructor(
     init {
 
         savedStateHandle.get<Int>(STATE_KEY_PAGE)?.let { p ->
-            Log.d(TAG, "restoring page: $p")
+            Log.d(MY_TAG, "restoring page: $p")
             setPage(p)
         }
         savedStateHandle.get<String>(STATE_KEY_QUERY)?.let { q ->
             setQuery(q)
         }
         savedStateHandle.get<Int>(STATE_KEY_LIST_POSITION)?.let { p ->
-            Log.d(TAG, "restoring scroll position: $p")
+            Log.d(MY_TAG, "restoring scroll position: $p")
             setListScrollPosition(p)
         }
         savedStateHandle.get<FoodCategory>(STATE_KEY_SELECTED_CATEGORY)?.let { c ->
@@ -78,7 +78,6 @@ constructor(
         } else {
             onTriggerEvent(RecipeListEvent.NewSearchEvent)
         }
-
     }
 
     fun onTriggerEvent(event: RecipeListEvent) {
@@ -98,7 +97,7 @@ constructor(
                 }
 
             } catch (e: Exception) {
-                Log.d(TAG, "onTriggerEvent: Exception: $e , ${e.cause}")
+                Log.d(MY_TAG, "onTriggerEvent: Exception: $e , ${e.cause}")
             }
         }
     }
@@ -114,7 +113,7 @@ constructor(
                 }
 
                 dataState.error?.let { error ->
-                    Log.e(TAG, "restore State: ${error}")
+                    Log.e(MY_TAG, "restore State: ${error}")
                     dialogQueue.appendErrorMessage(title = "Error", error)
                 }
             }.launchIn(viewModelScope)
@@ -132,7 +131,7 @@ constructor(
                 }
 
                 dataState.error?.let { error ->
-                    Log.e(TAG, "new Search: ${error}")
+                    Log.e(MY_TAG, "new Search: ${error}")
                     dialogQueue.appendErrorMessage(title = "Error", error)                }
             }.launchIn(viewModelScope)
 
@@ -143,7 +142,7 @@ constructor(
     private suspend fun nextPage() {
         if ((recipeListScrollPosition + 1) >= (page.value * PAGE_SIZE)) {
             incrementPage()
-            Log.d(TAG, "NEXT PAGE: triggered: ${page.value}")
+            Log.d(MY_TAG, "NEXT PAGE: triggered: ${page.value}")
 
             if (page.value > 1) {
                 searchRecipes
@@ -155,7 +154,7 @@ constructor(
                         }
 
                         dataState.error?.let { error ->
-                            Log.e(TAG, "NEXT PAGE: ${error}")
+                            Log.e(MY_TAG, "NEXT PAGE: ${error}")
                             dialogQueue.appendErrorMessage(title = "Error", error)                        }
                     }.launchIn(viewModelScope)
             }
