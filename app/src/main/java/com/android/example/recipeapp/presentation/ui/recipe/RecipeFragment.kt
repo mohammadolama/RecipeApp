@@ -23,6 +23,7 @@ import com.android.example.recipeapp.presentation.components.shimmer.LoadingShim
 import com.android.example.recipeapp.presentation.components.RecipeView
 import com.android.example.recipeapp.presentation.components.util.SnackbarController
 import com.android.example.recipeapp.presentation.ui.theme.AppTheme
+import com.android.example.recipeapp.presentation.ui.util.ConnectivityManager
 import com.android.example.recipeapp.presentation.ui.util.DialogQueue
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
@@ -35,12 +36,25 @@ class RecipeFragment : Fragment() {
     @Inject
     lateinit var application: BaseApplication
 
+    @Inject
+    lateinit var connectivityManager: ConnectivityManager
+
     private var snackbarController = SnackbarController(lifecycleScope)
 
     private var recipeID: MutableState<Int> = mutableStateOf(-1)
 
     lateinit var dialogQueue: DialogQueue
 
+
+    override fun onStart() {
+        super.onStart()
+        connectivityManager.registerConnectionObserver(this)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        connectivityManager.unregisterConnectionObserver(this)
+    }
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -68,7 +82,7 @@ class RecipeFragment : Fragment() {
                 val scaffoldState = rememberScaffoldState()
                 AppTheme(
                     darkTheme = application.isDark.value,
-                    isNetworkAvailable = viewModel.isNetworkHasConnectivity,
+                    isNetworkAvailable = connectivityManager.isNetworkAvailable.value,
                     loading = loading,
                     scaffoldState = scaffoldState,
                     dialogQueue = dialogQueue.queue.value

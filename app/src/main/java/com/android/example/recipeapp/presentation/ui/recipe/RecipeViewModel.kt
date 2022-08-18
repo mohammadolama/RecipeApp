@@ -38,8 +38,6 @@ constructor(
 
     val dialogQueue = DialogQueue()
 
-    val isNetworkHasConnectivity = connectivityManager.isNetworkAvailable.value
-
     init {
         // restore if process dies
         state.get<Int>(STATE_KEY_RECIPE)?.let { recipeId ->
@@ -66,7 +64,11 @@ constructor(
 
     private fun getRecipe(id: Int) {
 
-        getRecipe.excute(id, token).onEach { dataState ->
+        getRecipe.excute(
+            recipeInt = id,
+            token = token,
+            isNetworkAvailable = connectivityManager.isNetworkAvailable.value
+        ).onEach { dataState ->
             loading.value = dataState.loading
 
 

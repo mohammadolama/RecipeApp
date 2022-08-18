@@ -36,7 +36,8 @@ constructor(
     private val restoreRecipes: RestoreRecipes,
     @Named("auth_token") private val token: String,
     private val savedStateHandle: SavedStateHandle,
-    ) : ViewModel() {
+    private val connectivityManager: ConnectivityManager
+) : ViewModel() {
 
     val recipes: MutableState<List<Recipe>> = mutableStateOf(listOf())
 
@@ -123,7 +124,12 @@ constructor(
 
         resetSearchState()
         searchRecipes
-            .excute(token = token, page = page.value, query = query.value)
+            .excute(
+                token = token,
+                page = page.value,
+                query = query.value,
+                isNetworkAvailable = connectivityManager.isNetworkAvailable.value
+            )
             .onEach { dataState ->
                 loading.value = dataState.loading
                 dataState.data?.let { list ->
@@ -132,7 +138,8 @@ constructor(
 
                 dataState.error?.let { error ->
                     Log.e(MY_TAG, "new Search: ${error}")
-                    dialogQueue.appendErrorMessage(title = "Error", error)                }
+                    dialogQueue.appendErrorMessage(title = "Error", error)
+                }
             }.launchIn(viewModelScope)
 
 
@@ -146,7 +153,12 @@ constructor(
 
             if (page.value > 1) {
                 searchRecipes
-                    .excute(token = token, page = page.value, query = query.value)
+                    .excute(
+                        token = token,
+                        page = page.value,
+                        query = query.value,
+                        isNetworkAvailable = connectivityManager.isNetworkAvailable.value
+                    )
                     .onEach { dataState ->
                         loading.value = dataState.loading
                         dataState.data?.let { list ->
@@ -155,7 +167,8 @@ constructor(
 
                         dataState.error?.let { error ->
                             Log.e(MY_TAG, "NEXT PAGE: ${error}")
-                            dialogQueue.appendErrorMessage(title = "Error", error)                        }
+                            dialogQueue.appendErrorMessage(title = "Error", error)
+                        }
                     }.launchIn(viewModelScope)
             }
         }

@@ -21,9 +21,10 @@ class SearchRecipes(
     fun excute(
         token: String,
         page: Int,
-        query: String
+        query: String,
+        isNetworkAvailable: Boolean,
 
-    ): Flow<DataState<List<Recipe>>> = flow {
+        ): Flow<DataState<List<Recipe>>> = flow {
         try {
             emit(DataState.loading<List<Recipe>>())
 
@@ -33,14 +34,16 @@ class SearchRecipes(
                 throw Exception("Search Failed!")
             }
 
+            if (isNetworkAvailable){
+                val recipes = dtoMapper.toDomainList(
+                    recipeService.search(token = token, page = page, query = query).recipes
+                )
 
-            val recipes = dtoMapper.toDomainList(
-                recipeService.search(token = token, page = page, query = query).recipes
-            )
+                recipeDao.insertRecipes(
+                    entityMapper.toEntityList(recipes)
+                )
+            }
 
-            recipeDao.insertRecipes(
-                entityMapper.toEntityList(recipes)
-            )
 
             val cacheResult = if (query == "") {
                 recipeDao.getAllRecipes(
