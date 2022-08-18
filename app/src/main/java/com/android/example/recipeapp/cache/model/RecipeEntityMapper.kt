@@ -2,9 +2,7 @@ package com.android.example.recipeapp.cache.model
 
 import com.android.example.recipeapp.domain.model.Recipe
 import com.android.example.recipeapp.domain.util.DomainMapper
-import com.android.example.recipeapp.network.model.RecipeDto
 import com.android.example.recipeapp.util.DateUtils
-import java.lang.StringBuilder
 
 class RecipeEntityMapper : DomainMapper<RecipeEntity, Recipe> {
 
@@ -55,11 +53,11 @@ class RecipeEntityMapper : DomainMapper<RecipeEntity, Recipe> {
         return list
     }
 
-    fun fromEntityList(initial: List<RecipeEntity>): List<Recipe>{
+    fun fromEntityList(initial: List<RecipeEntity>): List<Recipe> {
         return initial.map { mapToDomainModel(it) }
     }
 
-    fun toEntityList(initial: List<Recipe>): List<RecipeEntity>{
+    fun toEntityList(initial: List<Recipe>): List<RecipeEntity> {
         return initial.map { mapFromDomainModel(it) }
     }
 

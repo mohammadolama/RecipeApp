@@ -4,7 +4,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.unit.Dp
@@ -19,11 +19,12 @@ fun ShimmerCardItem(
     brush: Brush,
     brush2: Brush,
     cardHeight: Dp,
-    padding:Dp
+    padding: Dp
 ) {
     Column(modifier = Modifier.padding(padding)) {
         Surface(
-            shape = MaterialTheme.shapes.small) {
+            shape = MaterialTheme.shapes.small
+        ) {
             Spacer(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -34,7 +35,8 @@ fun ShimmerCardItem(
         }
         Spacer(modifier = Modifier.padding(3.dp))
         Surface(
-            shape = MaterialTheme.shapes.small) {
+            shape = MaterialTheme.shapes.small
+        ) {
             Spacer(
                 modifier = Modifier
                     .fillMaxWidth()

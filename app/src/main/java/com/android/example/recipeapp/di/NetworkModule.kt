@@ -56,7 +56,7 @@ object NetworkModule {
 
     @Singleton
     @Provides
-    fun provideConnectivityManager(app: BaseApplication) : ConnectivityManager {
+    fun provideConnectivityManager(app: BaseApplication): ConnectivityManager {
         return ConnectivityManager(app)
     }
 

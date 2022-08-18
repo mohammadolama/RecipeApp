@@ -3,7 +3,6 @@ package com.android.example.recipeapp.di
 import androidx.room.Room
 import com.android.example.recipeapp.cache.RecipeDAO
 import com.android.example.recipeapp.cache.database.AppDatabase
-import com.android.example.recipeapp.cache.model.RecipeEntity
 import com.android.example.recipeapp.cache.model.RecipeEntityMapper
 import com.android.example.recipeapp.presentation.BaseApplication
 import dagger.Module

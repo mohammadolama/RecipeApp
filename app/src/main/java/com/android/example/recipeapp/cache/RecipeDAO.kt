@@ -33,12 +33,14 @@ interface RecipeDAO {
      * Ex: page = 2 retrieves recipes from 30-60.
      * Ex: page = 3 retrieves recipes from 60-90
      */
-    @Query("""
+    @Query(
+        """
         SELECT * FROM recipes 
         WHERE title LIKE '%' || :query || '%'
         OR ingredients LIKE '%' || :query || '%'  
         ORDER BY date_updated DESC LIMIT :pageSize OFFSET ((:page - 1) * :pageSize)
-        """)
+        """
+    )
     suspend fun searchRecipes(
         query: String,
         page: Int,
@@ -48,10 +50,12 @@ interface RecipeDAO {
     /**
      * Same as 'searchRecipes' function, but no query.
      */
-    @Query("""
+    @Query(
+        """
         SELECT * FROM recipes 
         ORDER BY date_updated DESC LIMIT :pageSize OFFSET ((:page - 1) * :pageSize)
-    """)
+    """
+    )
     suspend fun getAllRecipes(
         page: Int,
         pageSize: Int = RECIPE_PAGINATION_PAGE_SIZE
@@ -60,12 +64,14 @@ interface RecipeDAO {
     /**
      * Restore Recipes after process death
      */
-    @Query("""
+    @Query(
+        """
         SELECT * FROM recipes 
         WHERE title LIKE '%' || :query || '%'
         OR ingredients LIKE '%' || :query || '%' 
         ORDER BY date_updated DESC LIMIT (:page * :pageSize)
-        """)
+        """
+    )
     suspend fun restoreRecipes(
         query: String,
         page: Int,
@@ -75,10 +81,12 @@ interface RecipeDAO {
     /**
      * Same as 'restoreRecipes' function, but no query.
      */
-    @Query("""
+    @Query(
+        """
         SELECT * FROM recipes 
         ORDER BY date_updated DESC LIMIT (:page * :pageSize)
-    """)
+    """
+    )
     suspend fun restoreAllRecipes(
         page: Int,
         pageSize: Int = RECIPE_PAGINATION_PAGE_SIZE

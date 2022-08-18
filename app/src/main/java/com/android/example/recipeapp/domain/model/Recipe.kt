@@ -16,4 +16,4 @@ data class Recipe(
     var ingredients: List<String> = listOf(),
     var dateAdded: Date,
     var dateUpdated: Date,
-    ) : Parcelable
+) : Parcelable

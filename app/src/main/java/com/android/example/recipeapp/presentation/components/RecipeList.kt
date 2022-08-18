@@ -14,7 +14,6 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.android.example.recipeapp.R
 import com.android.example.recipeapp.domain.model.Recipe
-import com.android.example.recipeapp.presentation.BaseApplication
 import com.android.example.recipeapp.presentation.components.shimmer.LoadingShimmerList
 import com.android.example.recipeapp.presentation.components.util.SnackbarController
 import com.android.example.recipeapp.presentation.ui.recipe_list.PAGE_SIZE
@@ -31,7 +30,7 @@ fun RecipeList(
     scaffoldState: ScaffoldState,
     snackbarController: SnackbarController,
     navController: NavController,
-    application: BaseApplication
+    isDark: Boolean,
 ) {
 
     Box(
@@ -40,8 +39,8 @@ fun RecipeList(
             .background(color = MaterialTheme.colors.background)
     ) {
         if (loading && recipes.isEmpty()) {
-            LoadingShimmerList(cardHeight = 250.dp, padding = 8.dp, application = application)
-        }else if ((recipes.isEmpty())){
+            LoadingShimmerList(cardHeight = 250.dp, padding = 8.dp, isDark = isDark)
+        } else if ((recipes.isEmpty())) {
             NothingHere()
         } else {
             LazyColumn {

@@ -18,9 +18,10 @@ import androidx.compose.ui.unit.dp
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import com.android.example.recipeapp.datastore.SettingsDatastore
 import com.android.example.recipeapp.presentation.BaseApplication
-import com.android.example.recipeapp.presentation.components.shimmer.LoadingShimmerList
 import com.android.example.recipeapp.presentation.components.RecipeView
+import com.android.example.recipeapp.presentation.components.shimmer.LoadingShimmerList
 import com.android.example.recipeapp.presentation.components.util.SnackbarController
 import com.android.example.recipeapp.presentation.ui.theme.AppTheme
 import com.android.example.recipeapp.presentation.ui.util.ConnectivityManager
@@ -39,6 +40,9 @@ class RecipeFragment : Fragment() {
     @Inject
     lateinit var connectivityManager: ConnectivityManager
 
+    @Inject
+    lateinit var datastore: SettingsDatastore
+
     private var snackbarController = SnackbarController(lifecycleScope)
 
     private var recipeID: MutableState<Int> = mutableStateOf(-1)
@@ -46,15 +50,15 @@ class RecipeFragment : Fragment() {
     lateinit var dialogQueue: DialogQueue
 
 
-    override fun onStart() {
-        super.onStart()
-        connectivityManager.registerConnectionObserver(this)
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        connectivityManager.unregisterConnectionObserver(this)
-    }
+//    override fun onStart() {
+//        super.onStart()
+//        connectivityManager.registerConnectionObserver(this)
+//    }
+//
+//    override fun onDestroy() {
+//        super.onDestroy()
+//        connectivityManager.unregisterConnectionObserver(this)
+//    }
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -81,7 +85,7 @@ class RecipeFragment : Fragment() {
                 val recipe = viewModel.recipe.value
                 val scaffoldState = rememberScaffoldState()
                 AppTheme(
-                    darkTheme = application.isDark.value,
+                    darkTheme = datastore.isDark.value,
                     isNetworkAvailable = connectivityManager.isNetworkAvailable.value,
                     loading = loading,
                     scaffoldState = scaffoldState,
@@ -102,7 +106,7 @@ class RecipeFragment : Fragment() {
                                     cardHeight = 250.dp,
                                     padding = 8.dp,
                                     forRecipeFragment = true,
-                                    application
+                                    isDark = datastore.isDark.value,
                                 )
                             } else {
                                 recipe?.let {

@@ -9,14 +9,10 @@ import androidx.compose.material.ScaffoldState
 import androidx.compose.material.darkColors
 import androidx.compose.material.lightColors
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import com.android.example.recipeapp.presentation.components.*
-import com.android.example.recipeapp.presentation.ui.util.DialogQueue
-import kotlinx.coroutines.delay
 import java.util.*
 
 private val LightThemeColors = lightColors(
@@ -66,7 +62,7 @@ fun AppTheme(
                 .fillMaxSize()
                 .background(if (!darkTheme) Grey1 else Color.Black)
         ) {
-            Column() {
+            Column {
                 ConnectivityMonitor(isNetworkAvailable = isNetworkAvailable)
                 content()
             }
@@ -87,7 +83,7 @@ fun AppTheme(
 @Composable
 fun ProcessDialgoQueue(
     dialogQueue: Queue<GenericDialogInfo>
-){
+) {
     dialogQueue.peek()?.let { dialogInfo ->
         GenericDialog(
             onDismiss = dialogInfo.onDismiss,

@@ -30,7 +30,7 @@ constructor(
     private val getRecipe: GetRecipe,
     private val connectivityManager: ConnectivityManager
 
-    ) : ViewModel() {
+) : ViewModel() {
 
     val recipe: MutableState<Recipe?> = mutableStateOf(null)
 
@@ -79,7 +79,8 @@ constructor(
 
             dataState.error?.let { error ->
                 Log.e(MY_TAG, "NEXT PAGE: ${error}")
-                dialogQueue.appendErrorMessage(title = "Error", error)            }
+                dialogQueue.appendErrorMessage(title = "Error", error)
+            }
 
 
         }.launchIn(viewModelScope)

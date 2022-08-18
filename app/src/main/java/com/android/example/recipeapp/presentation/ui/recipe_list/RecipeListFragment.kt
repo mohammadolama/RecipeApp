@@ -16,6 +16,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.findNavController
+import com.android.example.recipeapp.datastore.SettingsDatastore
 import com.android.example.recipeapp.presentation.BaseApplication
 import com.android.example.recipeapp.presentation.components.RecipeList
 import com.android.example.recipeapp.presentation.components.SearchAppBar
@@ -36,22 +37,15 @@ class RecipeListFragment : Fragment() {
     @Inject
     lateinit var connectivityManager: ConnectivityManager
 
+    @Inject
+    lateinit var datastore: SettingsDatastore
+
     private val viewModel: RecipeListViewModel by viewModels()
 
     private var snackbarController = SnackbarController(lifecycleScope)
 
     lateinit var dialogQueue: DialogQueue
 
-
-    override fun onStart() {
-        super.onStart()
-        connectivityManager.registerConnectionObserver(this)
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        connectivityManager.unregisterConnectionObserver(this)
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -86,7 +80,7 @@ class RecipeListFragment : Fragment() {
                 val scaffoldState = rememberScaffoldState()
 
                 AppTheme(
-                    darkTheme = application.isDark.value,
+                    darkTheme = datastore.isDark.value,
                     isNetworkAvailable = connectivityManager.isNetworkAvailable.value,
                     loading = loading,
                     scaffoldState = scaffoldState,
@@ -111,7 +105,7 @@ class RecipeListFragment : Fragment() {
                                 onSelectedCategoryChanged = viewModel::onSelectedCategoryChanged,
                                 onChangedCategoryScrollPosition = viewModel::onChangedCategoryScrollPosition,
                                 onToggleTheme = {
-                                    application.toggleLightTheme()
+                                    datastore.toggleTheme()
                                 }
                             )
 
@@ -133,7 +127,7 @@ class RecipeListFragment : Fragment() {
                                 scaffoldState = scaffoldState,
                                 snackbarController = snackbarController,
                                 navController = findNavController(),
-                                application = application
+                                isDark = datastore.isDark.value
                             )
 
                         }

@@ -10,11 +10,9 @@ abstract class AppDatabase : RoomDatabase() {
 
     abstract fun recipeDao(): RecipeDAO
 
-    companion object{
+    companion object {
         val DATABASE_BASE = "recipe_db"
     }
-
-
 
 
 }

@@ -10,7 +10,6 @@ import com.android.example.recipeapp.util.RECIPE_PAGINATION_PAGE_SIZE
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
-import kotlin.Exception
 
 class SearchRecipes(
     private val recipeDao: RecipeDAO,
@@ -34,7 +33,7 @@ class SearchRecipes(
                 throw Exception("Search Failed!")
             }
 
-            if (isNetworkAvailable){
+            if (isNetworkAvailable) {
                 val recipes = dtoMapper.toDomainList(
                     recipeService.search(token = token, page = page, query = query).recipes
                 )

@@ -4,7 +4,6 @@ import android.util.Log
 import com.android.example.recipeapp.util.MY_TAG
 import java.io.IOException
 import java.net.InetSocketAddress
-import java.net.Socket
 import javax.net.SocketFactory
 
 
